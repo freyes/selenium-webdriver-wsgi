@@ -1,0 +1,7 @@
+ENV
+*~
+*.pyc
+*.pyo
+.ropeproject
+*.egg-info
+build/
