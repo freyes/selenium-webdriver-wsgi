@@ -1,9 +1,12 @@
+import os
 import time
 import socket
 import logging
 from multiprocessing import Process
 from wsgiref import simple_server
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
 from webtest import app as testapp
 from webtest.compat import HTTPConnection
 from webtest.compat import CannotSendRequest
@@ -96,3 +99,62 @@ class WebDriverApp(testapp.TestApp):
                     break
                 else:
                     time.sleep(.3)
+
+    def is_element_present(self, how, what):
+        try:
+            self.browser.find_element(by=how, value=what)
+        except NoSuchElementException:
+            return False
+        return True
+
+    def wait_element_by(self, xpath=None, id=None, name=None, link_text=None,
+                        css=None, timeout=20):
+        driver = self.browser
+        if xpath:
+            method = driver.find_element_by_xpath
+            arg = xpath
+        elif id:
+            method = driver.find_element_by_id
+            arg = id
+        elif name:
+            method = driver.find_element_by_name
+            arg = name
+        elif link_text:
+            method = driver.find_element_by_link_text
+            arg = link_text
+        elif css:
+            method = driver.find_element_by_css_selector
+            arg = css
+        else:
+            raise ValueError("please provide a type (xpath, id or name)")
+
+        try:
+            fn = lambda driver: method(arg)
+            WebDriverWait(driver, timeout, 1.0).until(fn)
+        except TimeoutException, ex:
+            self.log.error("%s" % ex)
+            self.take_screenshot("/tmp")
+            assert False, "timeout, element '%s' wasn't found" % arg
+
+    def wait_until_dissapears(self, xpath, timeout=20, poll=0.5):
+        start = time.time()
+        while (time.time() - start) <= timeout:
+            try:
+                self.browser.find_element_by_xpath(xpath)
+            except Exception:
+                return
+            time.sleep(poll)
+        raise AttributeError("Element %s never dissappeared" % xpath)
+
+    def take_screenshot(self, directory, name=None):
+        path = None
+        try:
+            path = os.path.join(directory, "shot_%s.png" % \
+                                (name or self.__class__.__name__))
+            self.browser.save_screenshot(path)
+            self.log.debug("Shot saved: %s" % path)
+        except Exception, ex:
+            self.log.warn("I couldn't take the screenshot on tearDown: %s" \
+                              % ex)
+            path = None
+        return path
