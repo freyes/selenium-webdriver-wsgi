@@ -9,8 +9,8 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from webtest import app as testapp
 from httplib import HTTPConnection, CannotSendRequest
-from webtest.sel import (_free_port, WSGIApplication, WSGIServer,
-                         WSGIRequestHandler)
+from webtest.http import get_free_port
+from webtest.sel import WSGIApplication, WSGIServer, WSGIRequestHandler
 
 
 class WebDriverApp(testapp.TestApp):
@@ -45,7 +45,7 @@ class WebDriverApp(testapp.TestApp):
 
     def _run_server(self, app):
         """Run a wsgi server in a separate thread"""
-        ip, port = _free_port()
+        ip, port = get_free_port()
         self.app = app = WSGIApplication(app, (ip, port))
 
         def run():
