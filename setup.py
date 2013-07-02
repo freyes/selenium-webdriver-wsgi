@@ -10,7 +10,7 @@ setup(name="selwsgi",
       license="MIT",
       keywords="selenium wsgi webtest unittest",
       url="https://github.com/freyes/selenium-webdriver-wsgi",
-      packages=find_packages(),
+      py_modules=["selwsgi", ],
       classifiers=[
           "Classifier: Intended Audience :: Developers"
           "Classifier: License :: OSI Approved :: MIT License"
