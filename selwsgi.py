@@ -158,7 +158,7 @@ class WebDriverApp(testapp.TestApp):
             path = None
         return path
 
-    def fill_form(self, resp, form_name, values):
+    def fill_form(self, form_name, values):
         form = self.app.browser.find_element_by_id(form_name)
         assert form is not None, "form %s not found" % form_name
         time.sleep(1)
