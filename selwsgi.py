@@ -8,8 +8,7 @@ from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from webtest import app as testapp
-from webtest.compat import HTTPConnection
-from webtest.compat import CannotSendRequest
+from six.moves.http_client import HTTPConnection, HTTPException
 from webtest.sel import (_free_port, WSGIApplication, WSGIServer,
                          WSGIRequestHandler)
 
@@ -75,7 +74,7 @@ class WebDriverApp(testapp.TestApp):
             try:
                 conn.request('GET', '/__application__')
                 conn.getresponse()
-            except (socket.error, CannotSendRequest):
+            except (socket.error, HTTPException):
                 time.sleep(.3)
             else:
                 break
