@@ -149,12 +149,25 @@ class WebDriverApp(testapp.TestApp):
     def take_screenshot(self, directory, name=None):
         path = None
         try:
-            path = os.path.join(directory, "shot_%s.png" % \
+            path = os.path.join(directory, "shot_%s.png" %
                                 (name or self.__class__.__name__))
             self.browser.save_screenshot(path)
             self.log.debug("Shot saved: %s" % path)
         except Exception, ex:
-            self.log.warn("I couldn't take the screenshot on tearDown: %s" \
-                              % ex)
+            self.log.warn("I couldn't take the screenshot on tearDown %s" % ex)
             path = None
         return path
+
+    def fill_form(self, resp, form_name, values):
+        form = self.app.browser.find_element_by_id(form_name)
+        assert form is not None, "form %s not found" % form_name
+        time.sleep(1)
+        for key, value in values.items():
+            XPATH = 'id("%s")//input[@name="%s"]' % (form_name, key)
+            item = self.browser.find_element_by_xpath(XPATH)
+            item.clear()
+            item.send_keys(value)
+            item = self.browser.find_element_by_xpath(XPATH)
+            assert item.get_attribute("value") == value
+
+        return self.app.browser.find_element_by_id(form_name)
