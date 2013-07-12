@@ -13,11 +13,11 @@ setup(name="selwsgi",
       py_modules=["selwsgi", ],
       install_requires=["WebTest", "WebOb"],
       classifiers=[
-          "Classifier: Intended Audience :: Developers"
-          "Classifier: License :: OSI Approved :: MIT License"
-          "Classifier: Topic :: Internet :: WWW/HTTP :: WSGI"
-          "Classifier: Topic :: Internet :: WWW/HTTP :: WSGI :: Server"
-          "Classifier: Programming Language :: Python :: 2.5"
-          "Classifier: Programming Language :: Python :: 2.6"
-          "Classifier: Programming Language :: Python :: 2.7"
+          "Intended Audience :: Developers",
+          "License :: OSI Approved :: MIT License",
+          "Topic :: Internet :: WWW/HTTP :: WSGI",
+          "Topic :: Internet :: WWW/HTTP :: WSGI :: Server",
+          "Programming Language :: Python :: 2.5",
+          "Programming Language :: Python :: 2.6",
+          "Programming Language :: Python :: 2.7"
       ])
