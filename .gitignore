@@ -5,3 +5,4 @@ ENV
 .ropeproject
 *.egg-info
 build/
+dist/
