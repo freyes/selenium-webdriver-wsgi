@@ -12,7 +12,7 @@ def read(fname):
 
 
 setup(name="selwsgi",
-      version="0.1",
+      version="0.2.dev",
       author="Felipe Reyes",
       author_email="freyes@tty.cl",
       description="A simple library to wrap wsgi apps in an evironment suitable to be unit tested with Selenium WebDriver",
